@@ -65,7 +65,6 @@ public class FAT {
             startLocation = value[startLocation];
         }
 
-
         for(int i = 0 , j=2; i < size; j++){
 
             if(value[j] == 0){
@@ -77,7 +76,6 @@ public class FAT {
         }
 
         value[0] -= size;
-
     }
 
     /**

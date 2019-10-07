@@ -1,0 +1,33 @@
+.pusher {
+    background: url("../images/bg.png");
+}
+
+.m-show-right {
+    margin-right: 2em !important;
+    margin-top: 0em !important;
+}
+.m-show-left {
+    margin-left: 2em !important;
+    margin-top: 0em !important;
+}
+
+
+.m-middle-margin {
+    margin-top: 8em !important;
+    margin-bottom: 8em !important;
+}
+
+.m-middle-size {
+    height: 50em !important;
+}
+
+.m-margin-bottom-small {
+    margin-bottom: 0.5em !important;
+
+}
+.m-margin-left-small {
+    margin-left: 0.5em !important;
+}
+.m-margin-top-small {
+    margin-left: 0.5em !important;
+}

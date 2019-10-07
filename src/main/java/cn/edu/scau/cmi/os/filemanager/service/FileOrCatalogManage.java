@@ -1,5 +1,8 @@
 package cn.edu.scau.cmi.os.filemanager.service;
 
+import cn.edu.scau.cmi.os.filemanager.domain.ResultInfo;
+import com.sun.org.apache.regexp.internal.RE;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -10,21 +13,21 @@ public interface FileOrCatalogManage {
      * @param fileName
      * @param type
      */
-    void create_file(String fileName,String type,int size) throws IOException;
+    ResultInfo create_file(String fileName, String type) throws IOException;
 
     /**
      * 打开文件
      * @param fileName
      * @param type
      */
-    void open_file(String fileName,String type);
+    ResultInfo open_file(String fileName,String type);
 
     /**
      * 读文件
      * @param fileName
      * @param size
      */
-    void read_file(String fileName,String type,int size) throws FileNotFoundException;
+    ResultInfo read_file(String fileName,int size) throws FileNotFoundException;
 
     /**
      * 写文件
@@ -32,48 +35,48 @@ public interface FileOrCatalogManage {
      * @param buffer
      * @param size
      */
-    void write_file(String fileName,String buffer,int size ,boolean flag);
+    ResultInfo write_file(String fileName,String buffer,int size ,boolean flag);
 
     /**
      * 关闭文件
      * @param fileName
      */
-    void close_file(String fileName);
+    ResultInfo close_file(String fileName);
 
     /**
      * 删除文件
      * @param fileName
      */
-    void delete_file(String fileName);
+    ResultInfo delete_file(String fileName);
 
     /**
      * 显示文件内容
      * @param fileName
      */
-    void  type_file(String fileName);
+    ResultInfo  type_file(String fileName) throws FileNotFoundException;
 
     /**
      * 改变文件属性
      * @param fileName
      */
-    void change(String fileName,String type);
+    ResultInfo change(String fileName,String type);
     /**
      * 建立目录
      * @param catalogName
      */
-    void create_catalog(String catalogName);
+    ResultInfo create_catalog(String catalogName);
 
     /**
      * 显示目录内容
      * @param catalogName
      */
-    void dir_catalog(String catalogName);
+    ResultInfo dir_catalog(String catalogName);
 
     /**
      * 删除空目录
      * @param catalogName
      */
-    void delete_freeCatalog(String catalogName);
+    ResultInfo delete_freeCatalog(String catalogName);
 }
 
 

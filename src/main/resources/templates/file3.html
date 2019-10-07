@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>磁盘文件管理系统</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+    <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body id="body">
+<div class="ui dimmer" >
+    <div class="content" style="width: 100px;margin-left: auto;margin-right: auto">
+        <div class="center" id="dimmer">
+
+        </div>
+    </div>
+</div>
+    <div class="ui inverted top attached segment">
+        <div class="ui center aligned container">
+            <h2>磁盘文件管理系统</h2>
+        </div>
+        <div class="ui left bottom aligned fluid container m-show-left">
+            <a class="ui labeled icon button" href="javascript:history.go(-1)">
+                <i class="arrow left icon"></i>
+                返回
+            </a>
+        </div>
+        <div class="ui right aligned fluid  container m-show-right">
+            <div class="ui icon inverted left labeled input focus">
+                <div class="ui white label">D:/root/</div>
+                <input type="text" placeholder="Search..." id="find">
+                <i class="search link icon" id="search"></i>
+            </div>
+        </div>
+    </div>
+
+                    <div class="ui attached segment pushable">
+                        <div class="ui visible  left vertical sidebar menu">
+                            <a class="item">
+                                <h3>FAT表的统计情况</h3>
+                            </a>
+                            <a class="item">
+                                <div class="ui teal basic label">D:/root/</div>
+                                根目录
+                            </a>
+                            <a class="item">
+                                <div class="ui teal basic  label">128个</div>
+                                总磁盘数
+                            </a>
+                            <a class="item">
+                                <div class="ui teal basic  label" ><span id="remaining">126个</span></div>
+                                剩余磁盘数
+                            </a>
+                        </div>
+
+                        <div class="pusher">
+
+                            <div class="ui two column grid">
+                                <div class="column">
+                                    <div class="ui three doubling stackable cards">
+                                        <div class="ui card">
+                                            <div class="image">
+                                                <div class="ui placeholder">
+                                                    <div class="square image"></div>
+                                                </div>
+                                            </div>
+                                            <div class="content" style="width: 150px">
+                                                <div class="ui container m-margin-left-small m-margin-top-small">
+                                                    <form class="ui form">
+                                                        <div class="field">
+                                                            <label>文件名（相对路径输入，如aaa/bbb.txt）</label>
+                                                            <div class="ui labeled input">
+                                                                <div class="ui label">
+                                                                    D:/root/
+                                                                </div>
+                                                                <input type="text" name="file-name" placeholder="文件名" id="filename1">
+                                                            </div>
+                                                        </div>
+                                                        <div class="ui inverted section divider"></div>
+                                                        <div class="ui basic teal button" id="typeFile">显示文件内容</div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="column">
+                                    <div class="ui three doubling stackable cards">
+                                        <div class="ui card">
+                                            <div class="image">
+                                                <div class="ui placeholder">
+                                                    <div class="square image"></div>
+                                                </div>
+                                            </div>
+                                            <div class="content" style="width: 150px">
+                                                <div class="ui container m-margin-left-small m-margin-top-small">
+                                                    <form class="ui form">
+                                                        <div class="field">
+                                                            <label>文件内容</label>
+                                                            <textarea placeholder="显示文件的内容" style="width: 200px;height: 200px" id="content"></textarea>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="ui three column">
+                                    <div class="column">
+                                        <div class="ui three doubling stackable cards">
+                                            <div class="ui card">
+                                                <div class="image">
+                                                    <div class="ui placeholder">
+                                                        <div class="square image"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="content" style="width: 150px">
+                                                    <div class="ui container m-margin-left-small m-margin-top-small">
+                                                        <form class="ui form">
+                                                            <div class="field">
+                                                                <label>目录名（相对路径输入，如aaa/bbb）</label>
+                                                                <div class="ui labeled input">
+                                                                    <div class="ui label">
+                                                                        D:/root/
+                                                                    </div>
+                                                                    <input type="text" name="catalog-name" placeholder="目录名" id="catalogname1">
+                                                                </div>
+                                                            </div>
+                                                            <div class="ui inverted section divider"></div>
+                                                            <div class="ui basic teal button" id="createCatalog">创建目录</div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="column">
+                                    <div class="ui three doubling stackable cards">
+                                        <div class="ui card">
+                                            <div class="image">
+                                                <div class="ui placeholder">
+                                                    <div class="square image"></div>
+                                                </div>
+                                            </div>
+                                            <div class="content" style="width: 150px">
+                                                <div class="ui container m-margin-left-small m-margin-top-small">
+                                                    <form class="ui form">
+                                                        <div class="field">
+                                                            <label>目录名（相对路径输入，如aaa/bbb）</label>
+                                                            <div class="ui labeled input">
+                                                                <div class="ui label">
+                                                                    D:/root/
+                                                                </div>
+                                                                <input type="text" name="catalog-name" placeholder="目录名" id="catalogname2">
+                                                            </div>
+                                                        </div>
+                                                        <div class="ui inverted section divider"></div>
+                                                        <div class="ui basic teal button" id="deleteFreeCatalog">删除空目录</div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="column">
+                                    <div class="ui three doubling stackable cards">
+                                        <div class="ui card">
+                                            <div class="image">
+                                                <div class="ui placeholder">
+                                                    <div class="square image"></div>
+                                                </div>
+                                            </div>
+                                            <div class="content" style="width: 150px">
+                                                <div class="ui container m-margin-left-small m-margin-top-small">
+                                                    <form class="ui form">
+                                                        <div class="field">
+                                                            <label>目录名（相对路径输入，如aaa/bbb）</label>
+                                                            <div class="ui labeled input">
+                                                                <div class="ui label">
+                                                                    D:/root/
+                                                                </div>
+                                                                <input type="text" name="catalog-name" placeholder="目录名" id="catalogname3">
+                                                            </div>
+                                                        </div>
+                                                        <div class="ui inverted section divider"></div>
+                                                        <div class="ui basic teal button" id="dirCatalog">显示目录内容</div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="column">
+                                    <div class="ui three doubling stackable cards">
+                                        <div class="ui card">
+                                            <div class="image">
+                                                <div class="ui placeholder">
+                                                    <div class="square image"></div>
+                                                </div>
+                                            </div>
+                                            <div class="content" style="width: 150px">
+                                                <div class="ui container m-margin-left-small m-margin-top-small">
+                                                    <form class="ui form">
+                                                        <div class="field">
+                                                            <label>目录内容</label>
+                                                            <textarea placeholder="显示目录的内容" style="width: 200px;height: 150px" id="content1"></textarea>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        </div>
+                    </div>
+
+    <footer class="ui inverted bottom attached segment">
+        <div class="ui container">
+            <div>
+                <h2 style="text-align: center">磁盘文件管理系统</h2>
+            </div>
+            <div class="ui inverted section divider"></div>
+            <p style="text-align: center">Copyright © 2019 - 2020 Wuyihan Designed by Wuyihan</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+    <script src="../static/js/jquery-1.11.0.min.js"></script>
+
+    <script>
+        // showing multiple
+        $('.visible.example .ui.sidebar')
+            .sidebar({
+                context: '.visible.example .bottom.segment'
+            })
+            .sidebar('hide')
+        ;
+
+
+        $('.ui.accordion')
+            .accordion()
+        ;
+
+        $(function () {
+            var count = sessionStorage.getItem("count");
+            if (count != null) {
+                $('#remaining').html(count + "个");
+            }
+
+            $('#typeFile').click(function () {
+                var filename = $('#filename1').val();
+                if (filename.length == 0){
+                    alert("请输入文件名！");
+                    return false;
+                }
+                $.post("typeFile",{
+                    filename : filename
+                },function (data) {
+                    alert(data.errorMsg);
+                    $('#remaining').html(data.count + "个");
+
+                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("type");
+                    sessionStorage.removeItem("startnum");
+                    sessionStorage.removeItem("size");
+                    sessionStorage.removeItem("managertype");
+                    sessionStorage.setItem("count",data.count);
+                    // alert(data.content);
+                    // var contents = data.content.split("#");
+                    for (var i=0; i<data.content.length;i++){
+                        if (i % 8 == 0 && i != 0){
+                            $('#content').append("\n");
+                        }
+                        $('#content').append(data.content[i]);
+                    }
+                });
+                return false;
+            });
+
+            $('#createCatalog').click(function () {
+                var catalogname = $('#catalogname1').val();
+                if (catalogname.length == 0){
+                    alert("请输入目录名！");
+                    return false;
+                }
+                $.post("createCatalog",{
+                    catalogname : catalogname
+                },function (data) {
+                    alert(data.errorMsg);
+                    $('#remaining').html(data.count + "个");
+
+                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("type");
+                    sessionStorage.removeItem("startnum");
+                    sessionStorage.removeItem("size");
+                    sessionStorage.removeItem("managertype");
+                    sessionStorage.setItem("count",data.count);
+                });
+                return false;
+            });
+
+            $('#deleteFreeCatalog').click(function () {
+                var catalogname = $('#catalogname2').val();
+                if (catalogname.length == 0){
+                    alert("请输入目录名！");
+                    return false;
+                }
+                $.post("deleteFreeCatalog",{
+                    catalogname : catalogname
+                },function (data) {
+                    alert(data.errorMsg);
+                    $('#remaining').html(data.count + "个");
+
+                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("type");
+                    sessionStorage.removeItem("startnum");
+                    sessionStorage.removeItem("size");
+                    sessionStorage.removeItem("managertype");
+                    sessionStorage.setItem("count",data.count);
+                });
+                return false;
+            });
+
+            $('#dirCatalog').click(function () {
+                var catalogname = $('#catalogname3').val();
+                if (catalogname.length == 0){
+                    alert("请输入目录名！");
+                    return false;
+                }
+                $.post("dirCatalog",{
+                    catalogname : catalogname
+                },function (data) {
+                    alert(data.errorMsg);
+                    $('#remaining').html(data.count + "个");
+
+                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("type");
+                    sessionStorage.removeItem("startnum");
+                    sessionStorage.removeItem("size");
+                    sessionStorage.removeItem("managertype");
+                    sessionStorage.setItem("count",data.count);
+                    var contents = data.content.split("#");
+                    for (var i=0;i<contents.length;i++){
+                        $('#content1').append(contents[i] + "\n");
+                    }
+                });
+                return false;
+            });
+
+            $('#search').click(function () {
+                var find = $('#find').val();
+                if (find.length == 0){
+                    $('#dimmer').html('<div class="ui inverted icon header">\n' +
+                        '               <i class="smile outline icon"></i>\n' +
+                        '              \n' + '请输入您所要搜索的文件名或目录名！'+
+                        '              </div>');
+                    $('#body').dimmer('show');
+                    return false;
+                }else {
+                    $.post("findFileOrCatalog",{
+                        find : find
+                    },function (data) {
+                        if (find.indexOf(".") >= 0){
+                            if (data.errorMsg != null){
+                                $('#dimmer').html('<div class="ui inverted icon header">\n' +
+                                    '               <i class="frown outline icon"></i>\n' +
+                                    '              \n' +data.errorMsg +
+                                    '              </div>');
+                                $('#body').dimmer('show');
+                            } else {
+
+                                $('#dimmer').html('<table class="ui celled striped table">\n' +
+                                    '<thead>\n' +
+                                    '<tr><th colspan="6">\n' +
+                                    '        文件信息\n' +
+                                    '    </th>\n' +
+                                    '    </tr></thead>\n' +
+                                    '<tbody>\n' +
+                                    '<tr>\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '                <i class="file outline  icon"></i> 文件名\n' +
+                                    '            </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.openFileTable.pathName+'</td>\n' +
+                                    '        <!--<td class="right aligned collapsing">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '<tr>\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '                <i class="file outline  icon"></i> 文件类型名\n' +
+                                    '            </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.fileType+'</td>\n' +
+                                    '        <!--<td class="right aligned collapsing">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '<tr>\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '                <i class="file outline  icon"></i> 文件属性\n' +
+                                    '            </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.openFileTable.type+'</td>\n' +
+                                    '       <!--<td class="right aligned">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '<tr>\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '                <i class="file outline  icon"></i> 起始盘块号\n' +
+                                    '            </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.openFileTable.startNum+'</td>\n' +
+                                    '        <!--<td class="right aligned">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '<tr>\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '               <i class="file outline icon"></i> 文件长度\n' +
+                                    '          </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.openFileTable.size+'</td>\n' +
+                                    '        <!--<td class="right aligned">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '</tbody>\n' +
+                                    '</table>');
+                                $('#body').dimmer('show');
+                            }
+                        } else {
+                            if (data.errorMsg != null){
+                                $('#dimmer').html('<div class="ui inverted icon header">\n' +
+                                    '               <i class="frown outline icon"></i>\n' +
+                                    '              \n' +data.errorMsg +
+                                    '              </div>');
+                                $('#body').dimmer('show');
+                            }else {
+                                $('#dimmer').html('<table class="ui celled striped table">\n' +
+                                    '<thead>\n' +
+                                    '<tr><th colspan="6">\n' +
+                                    '        目录信息\n' +
+                                    '    </th>\n' +
+                                    '    </tr></thead>\n' +
+                                    '<tbody>\n' +
+                                    '<tr>\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '                <i class="folder icon"></i> 目录名\n' +
+                                    '            </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.openFileTable.pathName+'</td>\n' +
+                                    '        <!--<td class="right aligned collapsing">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '<tr>\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '                <i class="folder icon"></i> 目录属性\n' +
+                                    '            </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.openFileTable.type+'</td>\n' +
+                                    '        <!--<td class="right aligned collapsing">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '<tr >\n' +
+                                    '        <td class="collapsing" colspan="3">\n' +
+                                    '                <i class="folder icon"></i> 起始盘块号\n' +
+                                    '            </td>\n' +
+                                    '        <td class="right aligned collapsing">'+data.openFileTable.startNum+'</td>\n' +
+                                    '       <!--<td class="right aligned">10 hours ago</td>-->\n' +
+                                    '    </tr>\n' +
+                                    '</tbody>\n' +
+                                    '</table>');
+                                $('#body').dimmer('show');
+                            }
+                        }
+                    });
+                }
+            });
+
+        })
+    </script>
+</body>
+</html>

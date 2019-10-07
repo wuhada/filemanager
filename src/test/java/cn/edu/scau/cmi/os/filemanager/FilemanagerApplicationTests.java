@@ -27,13 +27,15 @@ public class FilemanagerApplicationTests {
 //        System.out.println(fat.getCount());
 
             FileOrCatalogManageImpl fileManage = new FileOrCatalogManageImpl();
-            fileManage.create_catalog("bbb");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        fileManage.delete_freeCatalog("bbb");
+//            fileManage.create_file("aaa.txt","txt");
+            fileManage.read_file("aaa.txt",7);
+//            fileManage.create_catalog("bbb");
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        fileManage.delete_freeCatalog("bbb");
 
 //            fileManage.create_file("aaa/bbb.txt","写",3);
 //            fileManage.create_file("aaa/ccc.txt","写",3);
