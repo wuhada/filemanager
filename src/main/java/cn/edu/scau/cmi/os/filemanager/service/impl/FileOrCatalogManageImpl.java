@@ -152,6 +152,14 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             resultInfo.setFlag(false);
             return resultInfo;
         }
+
+        if(catalog.getType().contains("只读") && type.contains("写")){
+            resultInfo.setCount(fat.getCount());
+            resultInfo.setErrorMsg("文件是只读属性，无法以写操作方式打开文件！");
+            resultInfo.setFlag(false);
+            return resultInfo;
+        }
+
         if (catalog.getType().equalsIgnoreCase("read") && type.equalsIgnoreCase("write")){
             System.out.println("文件是只读属性，打开失败！");
             resultInfo.setCount(fat.getCount());
@@ -199,13 +207,17 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
         OpenFileTable openFileTable = openFileTables.get(fileName);
 
         if (openFileTable == null){
-            open_file(fileName,"以读操作方式打开文件");
+            resultInfo.setCount(fat.getCount());
+            resultInfo.setErrorMsg("请先打开文件！");
+            resultInfo.setFlag(false);
+            return resultInfo;
+//            open_file(fileName,"以读操作方式打开文件");
         }
 
         if (openFileTable.getManagerType().contains("写")){
             System.out.println("读写失败！");
             resultInfo.setCount(fat.getCount());
-            resultInfo.setErrorMsg("文件以写方式打开，无法读取！");
+            resultInfo.setErrorMsg("文件以写操作方式打开，无法读取！");
             resultInfo.setFlag(false);
             return resultInfo;
         }
@@ -235,6 +247,16 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             try {
 //                reader.close();
                 fileInputStream.close();
+
+                if(stringBuffer.toString()==""||stringBuffer.toString()==null){
+                    resultInfo.setFlag(false);
+                    resultInfo.setOpenFileTable(openFileTable);
+                    resultInfo.setErrorMsg("文件内容为空！");
+                    resultInfo.setCount(fat.getCount());
+                    resultInfo.setContent(stringBuffer.toString());
+                    return resultInfo;
+                }
+
                 resultInfo.setFlag(true);
                 resultInfo.setOpenFileTable(openFileTable);
                 resultInfo.setErrorMsg("文件内容已经显示在右边方框内！");
@@ -251,19 +273,24 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
     @Override
     public ResultInfo write_file(String fileName, String buffer, int size ,boolean flag) {
 
+
         catalog = fat.getRoot();
         FileOutputStream fileOutputStream = null;
         OpenFileTable openFileTable = openFileTables.get(fileName);
 
         if (openFileTable == null){
-            open_file(fileName,"以写操作方式打开文件");
+            resultInfo.setCount(fat.getCount());
+            resultInfo.setErrorMsg("请先打开文件！");
+            resultInfo.setFlag(false);
+            return resultInfo;
+//            open_file(fileName,"以写操作方式打开文件");
         }else {
             String managerType = openFileTable.getManagerType();
             if (!managerType.contains("写")){
-                System.out.println("文件不是以写操作的方式打开，无法打开！");
+                System.out.println("文件不是以写操作的方式打开，无法写入！");
 
                 resultInfo.setCount(fat.getCount());
-                resultInfo.setErrorMsg("文件不是以写操作的方式打开，无法打开！");
+                resultInfo.setErrorMsg("文件不是以写操作的方式打开，无法写入！");
                 resultInfo.setFlag(false);
                 return resultInfo;
             }
@@ -273,29 +300,38 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             isExist(fileName,1);
             if (flag == true){
                 if (size % 8 == 0){
-                    catalog.setSize(size/8);
-                    openFileTable.setSize(size/8);
-                    fat.add(catalog.getStartLocation(),size/8);
+                    catalog.setSize(size/64);
+                    openFileTable.setSize(size/64);
+                    fat.add(catalog.getStartLocation(),size/64);
                 }else {
-                    catalog.setSize(1 + size/8);
-                    openFileTable.setSize(1 + size/8);
-                    fat.add(catalog.getStartLocation(),size/8 + 1);
+                    catalog.setSize(1 + size/64);
+                    openFileTable.setSize(1 + size/64);
+                    fat.add(catalog.getStartLocation(),size/64 + 1);
                 }
             }else {
                 if (size % 8 == 0){
-                    catalog.setSize(catalog.getSize() + size/8);
-                    openFileTable.setSize(catalog.getSize() + size/8);
-                    fat.add(catalog.getStartLocation(),size/8 );
+                   if(catalog!=null){
+                       catalog.setSize(catalog.getSize() + size/64);
+                       openFileTable.setSize(catalog.getSize() + size/64);
+                       fat.add(catalog.getStartLocation(),size/64 );
+                   }
                 }else {
-                    catalog.setSize(catalog.getSize() + size/8);
-                    openFileTable.setSize(catalog.getSize() + size/8);
-                    fat.add(catalog.getStartLocation(),size/8 + 1);
+                    if(catalog!=null) {
+                        catalog.setSize(catalog.getSize() + size / 64);
+                        openFileTable.setSize(catalog.getSize() + size / 64);
+                        fat.add(catalog.getStartLocation(), size / 64 + 1);
+                    }
                 }
             }
         }
 
+
         try {
-            fileOutputStream = new FileOutputStream("D:/root/" + fileName,flag);
+            if(flag==false){
+                fileOutputStream = new FileOutputStream("D:/root/" + fileName);
+            }else{
+                fileOutputStream = new FileOutputStream("D:/root/" + fileName,flag);
+            }
             byte[] bytes = buffer.getBytes();
             fileOutputStream.write(bytes,0,size);
 //            fileOutputStream.write('#');
@@ -308,6 +344,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
                 resultInfo.setOpenFileTable(openFileTable);
                 resultInfo.setErrorMsg("写入文件成功！");
                 resultInfo.setCount(fat.getCount());
+
                 return resultInfo;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -381,7 +418,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
     }
 
     @Override
-    public ResultInfo type_file(String fileName) throws FileNotFoundException {
+    public ResultInfo type_file(String fileName,String type) throws FileNotFoundException {
         catalog = fat.getRoot();
         int flag = isOpen(fileName);
         if (flag == 1){
@@ -391,11 +428,20 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             resultInfo.setFlag(false);
             return resultInfo;
         }
+
+
         OpenFileTable openFileTable = openFileTables.get(fileName);
+//        if (openFileTable == null){
+//            resultInfo.setCount(fat.getCount());
+//            resultInfo.setErrorMsg("请先打开文件！");
+//            resultInfo.setFlag(false);
+//            return resultInfo;
+//        }
+
         if (openFileTable != null){
             System.out.println("文件已打开，无法显示内容！");
             resultInfo.setCount(fat.getCount());
-            resultInfo.setErrorMsg("文件已被其他应用打开，无法读取内容！");
+            resultInfo.setErrorMsg("文件已被打开，无法读取内容！");
             resultInfo.setFlag(false);
             return resultInfo;
         }
@@ -423,13 +469,24 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
         }finally {
             try {
                 fileInputStream.close();
-                openFileTables.remove(fileName,openFileTable);
+//                openFileTables.remove(fileName,openFileTable);
+
+//                if(stringBuffer.toString()==""||stringBuffer.toString()==null){
+//                    resultInfo.setFlag(false);
+//                    resultInfo.setOpenFileTable(openFileTable);
+//                    resultInfo.setErrorMsg("文件内容为空！");
+//                    resultInfo.setCount(fat.getCount());
+//                    resultInfo.setContent(stringBuffer.toString());
+//                    return resultInfo;
+//                }
+
+                ResultInfo ri =  open_file(fileName,type);
+
                 resultInfo.setFlag(true);
-                resultInfo.setOpenFileTable(openFileTable);
+                resultInfo.setOpenFileTable(ri.getOpenFileTable());
                 resultInfo.setErrorMsg("文件内容已成功显示在右边方框里！");
                 resultInfo.setCount(fat.getCount());
                 resultInfo.setContent(stringBuffer.toString());
-
                 return resultInfo;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -539,6 +596,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             resultInfo.setCount(fat.getCount());
             resultInfo.setErrorMsg("目录不存在！");
             resultInfo.setFlag(false);
+            resultInfo.setContent("#");
             return resultInfo;
         }
         map = catalog.getTable();
@@ -550,8 +608,17 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             System.out.println(next.getKey());
             stringBuffer.append(next.getKey() + "#");
         }
+
+        if (stringBuffer.toString()==""||stringBuffer.toString()==null){
+            resultInfo.setFlag(false);
+            resultInfo.setErrorMsg("该目录下无其他子文件或子目录！");
+            resultInfo.setCount(fat.getCount());
+            resultInfo.setContent(stringBuffer.toString());
+            return resultInfo;
+        }
+
         resultInfo.setFlag(true);
-        resultInfo.setErrorMsg("目录n内容已成功显示在右边方框里！");
+        resultInfo.setErrorMsg("目录内容已成功显示在右边方框里！");
         resultInfo.setCount(fat.getCount());
         resultInfo.setContent(stringBuffer.toString());
         return resultInfo;

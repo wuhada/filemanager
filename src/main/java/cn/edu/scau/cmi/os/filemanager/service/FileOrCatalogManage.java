@@ -53,7 +53,7 @@ public interface FileOrCatalogManage {
      * 显示文件内容
      * @param fileName
      */
-    ResultInfo  type_file(String fileName) throws FileNotFoundException;
+    ResultInfo  type_file(String fileName,String type) throws FileNotFoundException;
 
     /**
      * 改变文件属性

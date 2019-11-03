@@ -291,11 +291,18 @@
                     // sessionStorage.setItem("startnum",null);
                     // sessionStorage.setItem("size",null);
                     // sessionStorage.setItem("managertype",null);
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
                     sessionStorage.removeItem("managertype");
+
+                    // sessionStorage.setItem("pathname",data.openFileTable.pathName);
+                    // sessionStorage.setItem("type",data.openFileTable.type);
+                    // sessionStorage.setItem("startnum",data.openFileTable.startNum);
+                    // sessionStorage.setItem("size",data.openFileTable.size);
+                    // sessionStorage.setItem("managertype",data.openFileTable.managerType);
+
                     sessionStorage.setItem("count",data.count);
                 });
                 return false;
@@ -318,7 +325,7 @@
                     // sessionStorage.setItem("startnum",null);
                     // sessionStorage.setItem("size",null);
                     // sessionStorage.setItem("managertype",null);
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
@@ -344,7 +351,7 @@
                     alert(data.errorMsg);
                     $('#remaining').html(data.count + "个");
 
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
@@ -378,11 +385,13 @@
                     // sessionStorage.setItem("startnum",data.openFileTable.startNum);
                     // sessionStorage.setItem("size",data.openFileTable.size);
                     // sessionStorage.setItem("managertype",data.openFileTable.managerType);
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
                     sessionStorage.removeItem("managertype");
+
+                    sessionStorage.setItem("managertype",data.openFileTable.managerType);
 
                     sessionStorage.setItem("count",data.count);
                 });

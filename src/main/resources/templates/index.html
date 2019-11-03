@@ -363,10 +363,10 @@
 
             if (count != null && pathname != null && type !=null && startnum != null && size != null && managertype != null) {
                 $('#remaining').html(count + "个");
-                var name = pathname.split("/")[pathname.split("/").length-1];
+                // var name = pathname.split("/")[pathname.split("/").length-1];
                 $('#table').append('<tr>\n' +
                     '<td>\n' +
-                    '    '+name+'\n' +
+                    '    '+pathname+'\n' +
                     '</td>\n' +
                     '<td>\n' +
                     '    '+decodeURI(type)+'\n' +
@@ -390,9 +390,13 @@
                 $('#table tr').each(function(){
 
                           if ($.trim($(this).children('td').eq(0).text()) == pathname){
-                              $(this).hide();
+                              $(this).remove();
                               sessionStorage.removeItem("searchParams");
                               sessionStorage.setItem("searchParams",$("#table").clone().html());
+                              //新加
+                              sessionStorage.setItem("flag",0);
+
+
                               return false;
                           }
                           // if (flag == true){
@@ -413,13 +417,15 @@
             if (count != null){
                 $('#remaining').html(count + "个");
             }
-            if (($('#table').find("tr").length ) != 0 && flag == 1){
-                var length = $('#table').find("tr").length -1 ;
-                $('#open').html(length + "个");
-            }else if (flag != 1){
-                $('#open').html($('#table').find("tr").length + "个");
-            }
-
+            // if (($('#table').find("tr").length ) >=0 && flag == 1){
+            //     var length = $('#table').find("tr").length -1 ;
+            //     $('#open').html(length + "个");
+            // }else if (flag != 1){
+            //     $('#open').html($('#table').find("tr").length+ "个");
+            // }else{
+            //     $('#open').html("0个");
+            // }
+            $('#open').html($('#table').find("tr").length+ "个");
         })
     </script>
 </body>

@@ -87,7 +87,7 @@ public class OSManager {
         ResultInfo ri;
         boolean flag = true;
 
-        if (parameter.get("clear")[0].equals("0")){
+        if (parameter.get("clear")[0].equals("1")){
             flag = false;
         }
 
@@ -134,7 +134,12 @@ public class OSManager {
         Map<String, String[]> parameter = request.getParameterMap();
         ResultInfo ri;
 
-        ri = manage.type_file(parameter.get("filename")[0]);
+        if(parameter.get("type")[0].equals("write")){
+            ri = manage.type_file(parameter.get("filename")[0],"以写操作方式打开文件");
+        }else {
+            ri = manage.type_file(parameter.get("filename")[0],"以读操作方式打开文件");
+        }
+
 
         ObjectMapper om = new ObjectMapper();
         String s = om.writeValueAsString(ri);

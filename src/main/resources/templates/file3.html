@@ -238,6 +238,7 @@
     <script src="../static/js/jquery-1.11.0.min.js"></script>
 
     <script>
+
         // showing multiple
         $('.visible.example .ui.sidebar')
             .sidebar({
@@ -259,30 +260,49 @@
 
             $('#typeFile').click(function () {
                 var filename = $('#filename1').val();
+                var type = sessionStorage.getItem("write");
                 if (filename.length == 0){
                     alert("请输入文件名！");
                     return false;
                 }
                 $.post("typeFile",{
-                    filename : filename
+                    filename : filename,
+                    type:type
                 },function (data) {
                     alert(data.errorMsg);
+                    $('#content').html("");
+
                     $('#remaining').html(data.count + "个");
 
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
                     sessionStorage.removeItem("managertype");
-                    sessionStorage.setItem("count",data.count);
-                    // alert(data.content);
-                    // var contents = data.content.split("#");
+
+
+                    if(data.flag==false){
+
+                        return false;
+                    }
+
+                    sessionStorage.setItem("pathname",data.openFileTable.pathName);
+                    sessionStorage.setItem("type",data.openFileTable.type);
+                    sessionStorage.setItem("startnum",data.openFileTable.startNum);
+                    sessionStorage.setItem("size",data.openFileTable.size);
+                    sessionStorage.setItem("managertype",data.openFileTable.managerType);
+
+                    if(data.content.length==0) {
+                        $('#content').text(" ");
+                    }
+
                     for (var i=0; i<data.content.length;i++){
                         if (i % 8 == 0 && i != 0){
                             $('#content').append("\n");
                         }
                         $('#content').append(data.content[i]);
                     }
+
                 });
                 return false;
             });
@@ -299,7 +319,7 @@
                     alert(data.errorMsg);
                     $('#remaining').html(data.count + "个");
 
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
@@ -321,7 +341,7 @@
                     alert(data.errorMsg);
                     $('#remaining').html(data.count + "个");
 
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
@@ -341,14 +361,21 @@
                     catalogname : catalogname
                 },function (data) {
                     alert(data.errorMsg);
+                    $('#content1').html("");
+
                     $('#remaining').html(data.count + "个");
 
-                    sessionStorage.removeItem("filename");
+                    sessionStorage.removeItem("pathname");
                     sessionStorage.removeItem("type");
                     sessionStorage.removeItem("startnum");
                     sessionStorage.removeItem("size");
                     sessionStorage.removeItem("managertype");
                     sessionStorage.setItem("count",data.count);
+
+                    if(data.content.length==0) {
+                        $('#content1').text(" ");
+                    }
+
                     var contents = data.content.split("#");
                     for (var i=0;i<contents.length;i++){
                         $('#content1').append(contents[i] + "\n");

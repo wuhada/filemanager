@@ -65,17 +65,17 @@ public class FAT {
             startLocation = value[startLocation];
         }
 
-        for(int i = 0 , j=2; i < size; j++){
+        for(int i = 0 , j=2; i < size && j<=126; j++){
 
             if(value[j] == 0){
                 value[startLocation] = j;
                 i++;
                 startLocation = j;
                 value[startLocation] = 255;
+                value[0]--;
             }
         }
-
-        value[0] -= size;
+//        value[0] -= size;
     }
 
     /**

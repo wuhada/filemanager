@@ -250,12 +250,21 @@
             },function (data) {
                 alert(data.errorMsg);
                 $('#remaining').html(data.count + "个");
+
+                sessionStorage.removeItem("pathname");
+                sessionStorage.removeItem("type");
+                sessionStorage.removeItem("startnum");
+                sessionStorage.removeItem("size");
+                sessionStorage.removeItem("managertype");
+
                 sessionStorage.setItem("pathname",data.openFileTable.pathName);
                 sessionStorage.setItem("type",data.openFileTable.type);
                 sessionStorage.setItem("startnum",data.openFileTable.startNum);
                 sessionStorage.setItem("size",data.openFileTable.size);
                 sessionStorage.setItem("managertype",data.openFileTable.managerType);
                 sessionStorage.setItem("count",data.count);
+                sessionStorage.setItem("write","write");
+                sessionStorage.setItem("flag",0);
             });
             return false;
         })
@@ -319,6 +328,8 @@
                 size : size
             },function (data) {
                 alert(data.errorMsg);
+                $('#content').text("");
+
                 $('#remaining').html(data.count + "个");
                 // sessionStorage.setItem("pathname",data.openFileTable.pathName);
                 // sessionStorage.setItem("type",data.openFileTable.type);
@@ -330,14 +341,31 @@
                 // sessionStorage.setItem("startnum",null);
                 // sessionStorage.setItem("size",null);
                 // sessionStorage.setItem("managertype",null);
-                sessionStorage.removeItem("filename");
+                sessionStorage.removeItem("pathname");
                 sessionStorage.removeItem("type");
                 sessionStorage.removeItem("startnum");
                 sessionStorage.removeItem("size");
                 sessionStorage.removeItem("managertype");
+
+                // if(data.errorMsg.contains("成功")){
+                //     sessionStorage.setItem("pathname",data.openFileTable.pathName);
+                //     sessionStorage.setItem("type",data.openFileTable.type);
+                //     sessionStorage.setItem("startnum",data.openFileTable.startNum);
+                //     sessionStorage.setItem("size",data.openFileTable.size);
+                //     sessionStorage.setItem("managertype",data.openFileTable.managerType);
+                // }
+
                 sessionStorage.setItem("count",data.count);
-                // alert(data.content);
-                $('#content').text(data.content);
+
+                if(data.content==null || data.content == ""){
+                    $('#content').text(" ");
+                    return false;
+                }
+
+                for(var i=0;i<size;i++){
+                    $('#content').append(data.content[i]);
+                }
+
             });
             return false;
         });
