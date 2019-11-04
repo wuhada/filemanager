@@ -160,13 +160,21 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             return resultInfo;
         }
 
-        if (catalog.getType().equalsIgnoreCase("read") && type.equalsIgnoreCase("write")){
+//        if (catalog.getType().equalsIgnoreCase("read") && type.equalsIgnoreCase("write")){
+//            System.out.println("文件是只读属性，打开失败！");
+//            resultInfo.setCount(fat.getCount());
+//            resultInfo.setErrorMsg("文件是只读属性，打开失败！");
+//            resultInfo.setFlag(false);
+//            return resultInfo;
+//        }
+        if (catalog.getType().contains("读") && type.contains("写")){
             System.out.println("文件是只读属性，打开失败！");
             resultInfo.setCount(fat.getCount());
             resultInfo.setErrorMsg("文件是只读属性，打开失败！");
             resultInfo.setFlag(false);
             return resultInfo;
         }
+
         OpenFileTable openFileTable = openFileTables.get(fileName);
         if (openFileTable != null) {
             System.out.println("文件已经打开！");
