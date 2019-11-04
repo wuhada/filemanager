@@ -226,6 +226,7 @@ public class OSManager {
         String[] split = ManageUtil.split(find);
         if (split[split.length-1].contains(".")){
             int exist = manage.isExist(find, 1);
+            System.out.println("------" + exist);
             if (exist == 1){
                 ri.setErrorMsg("抱歉，您所搜索的文件不存在！");
             }else {

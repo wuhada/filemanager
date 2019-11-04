@@ -450,7 +450,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
         if (openFileTable != null){
             System.out.println("文件已打开，无法显示内容！");
             resultInfo.setCount(fat.getCount());
-            resultInfo.setErrorMsg("文件已被打开，无法读取内容！");
+            resultInfo.setErrorMsg("文件已被打开，无法显示内容！");
             resultInfo.setFlag(false);
             return resultInfo;
         }
@@ -680,6 +680,8 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
     }
 
     public int isOpen(String fileName){
+        catalog = fat.getRoot();
+
         int flag = 0;
         int i;
         FileOrCatalogAttibutes subCatalog;
@@ -701,6 +703,8 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
     }
 
     public int isExist(String catalogName,int next){
+        catalog = fat.getRoot();
+
         int flag = 0;
         String[] split = ManageUtil.split(catalogName);
         int length = split.length;
