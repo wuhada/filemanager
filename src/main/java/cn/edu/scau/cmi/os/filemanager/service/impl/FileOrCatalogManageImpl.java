@@ -167,6 +167,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
 //            resultInfo.setFlag(false);
 //            return resultInfo;
 //        }
+
         if (catalog.getType().contains("读") && type.contains("写")){
             System.out.println("文件是只读属性，打开失败！");
             resultInfo.setCount(fat.getCount());
@@ -304,10 +305,10 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             }
         }
 
-        if(size > 8){
+        if(size > 64){
             isExist(fileName,1);
             if (flag == true){
-                if (size % 8 == 0){
+                if (size % 64 == 0){
                     catalog.setSize(size/64);
                     openFileTable.setSize(size/64);
                     fat.add(catalog.getStartLocation(),size/64);
@@ -317,7 +318,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
                     fat.add(catalog.getStartLocation(),size/64 + 1);
                 }
             }else {
-                if (size % 8 == 0){
+                if (size % 64 == 0){
                    if(catalog!=null){
                        catalog.setSize(catalog.getSize() + size/64);
                        openFileTable.setSize(catalog.getSize() + size/64);
