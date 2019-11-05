@@ -27,7 +27,7 @@ public interface FileOrCatalogManage {
      * @param fileName
      * @param size
      */
-    ResultInfo read_file(String fileName,int size) throws FileNotFoundException;
+    ResultInfo read_file(String fileName,int size,String type) throws FileNotFoundException;
 
     /**
      * 写文件
@@ -77,6 +77,13 @@ public interface FileOrCatalogManage {
      * @param catalogName
      */
     ResultInfo delete_freeCatalog(String catalogName);
+
+    /**
+     * 查找文件或目录
+     * @param name
+     * @return
+     */
+    ResultInfo findFileOrCatalog(String name);
 }
 
 

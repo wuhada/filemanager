@@ -35,6 +35,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
     @Override
     public ResultInfo create_file(String fileName, String type) throws IOException {
 
+        System.out.println(type);
         catalog = fat.getRoot();
         if (!root.exists()){
             root.mkdir();
@@ -153,6 +154,8 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             return resultInfo;
         }
 
+        System.out.println("123456789"+catalog.getType());
+
         if(catalog.getType().contains("只读") && type.contains("写")){
             resultInfo.setCount(fat.getCount());
             resultInfo.setErrorMsg("文件是只读属性，无法以写操作方式打开文件！");
@@ -168,13 +171,13 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
 //            return resultInfo;
 //        }
 
-        if (catalog.getType().contains("读") && type.contains("写")){
-            System.out.println("文件是只读属性，打开失败！");
-            resultInfo.setCount(fat.getCount());
-            resultInfo.setErrorMsg("文件是只读属性，打开失败！");
-            resultInfo.setFlag(false);
-            return resultInfo;
-        }
+        //if (catalog.getType().contains("只读") && type.contains("写")){
+        //    System.out.println("文件是只读属性，打开失败！");
+        //    resultInfo.setCount(fat.getCount());
+        //    resultInfo.setErrorMsg("文件是只读属性，打开失败！");
+        //    resultInfo.setFlag(false);
+        //    return resultInfo;
+        //}
 
         OpenFileTable openFileTable = openFileTables.get(fileName);
         if (openFileTable != null) {
@@ -195,6 +198,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
 
         openFileTable = new OpenFileTable();
 
+        System.out.println("wosile");
         openFileTable.setStartNum(catalog.getStartLocation());
         openFileTable.setType(catalog.getType());
         openFileTable.setManagerType(type);
@@ -202,6 +206,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
         openFileTable.setPathName(fileName);
 
         openFileTables.put(fileName,openFileTable);
+        System.out.println("wosileyyyyyyy");
 
         resultInfo.setFlag(true);
         resultInfo.setOpenFileTable(openFileTable);
@@ -211,10 +216,11 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
     }
 
     @Override
-    public ResultInfo read_file(String fileName, int size) throws FileNotFoundException {
+    public ResultInfo read_file(String fileName, int size,String type) throws FileNotFoundException {
         catalog = fat.getRoot();
         OpenFileTable openFileTable = openFileTables.get(fileName);
-
+        System.out.println("wyhasssssss");
+        System.out.println(openFileTable==null);
         if (openFileTable == null){
             resultInfo.setCount(fat.getCount());
             resultInfo.setErrorMsg("请先打开文件！");
@@ -266,8 +272,10 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
                     return resultInfo;
                 }
 
+                ResultInfo ri =  open_file(fileName,type);
+
                 resultInfo.setFlag(true);
-                resultInfo.setOpenFileTable(openFileTable);
+                resultInfo.setOpenFileTable(ri.getOpenFileTable());
                 resultInfo.setErrorMsg("文件内容已经显示在右边方框内！");
                 resultInfo.setCount(fat.getCount());
                 resultInfo.setContent(stringBuffer.toString());
@@ -349,6 +357,8 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
         }finally {
             try {
                 fileOutputStream.close();
+//                //新加
+//                openFileTable = openFileTables.get(fileName);
                 resultInfo.setFlag(true);
                 resultInfo.setOpenFileTable(openFileTable);
                 resultInfo.setErrorMsg("写入文件成功！");
@@ -489,10 +499,13 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
 //                    return resultInfo;
 //                }
 
-                ResultInfo ri =  open_file(fileName,type);
+               // ResultInfo ri =  open_file(fileName,type);
+                //ri.getOpenFileTable().setPathName(fileName);
+                System.out.println("wyhaaaaaa");
 
                 resultInfo.setFlag(true);
-                resultInfo.setOpenFileTable(ri.getOpenFileTable());
+                //resultInfo.setOpenFileTable(ri.getOpenFileTable());
+                resultInfo.setOpenFileTable(openFileTable);
                 resultInfo.setErrorMsg("文件内容已成功显示在右边方框里！");
                 resultInfo.setCount(fat.getCount());
                 resultInfo.setContent(stringBuffer.toString());
@@ -525,6 +538,7 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             return resultInfo;
         }
         catalog.setType(type);
+
 
         openFileTable = new OpenFileTable();
 
@@ -677,6 +691,49 @@ public class FileOrCatalogManageImpl implements FileOrCatalogManage {
             }
         }
         return resultInfo;
+    }
+
+    @Override
+    public ResultInfo findFileOrCatalog(String name) {
+
+
+
+        OpenFileTable openFileTable = new OpenFileTable();
+
+        String[] split = ManageUtil.split(name);
+        if (split[split.length-1].contains(".")){
+            int exist = isExist(name, 1);
+            System.out.println("------" + exist);
+            if (exist == 1){
+                resultInfo.setErrorMsg("抱歉，您所搜索的文件不存在！");
+            }else {
+                openFileTable.setSize(catalog.getSize());
+                openFileTable.setPathName(split[split.length-1]);
+                openFileTable.setStartNum(catalog.getStartLocation());
+                openFileTable.setPathName(name);
+                openFileTable.setType(catalog.getType());
+                resultInfo.setOpenFileTable(openFileTable);
+                resultInfo.setErrorMsg(null);
+                resultInfo.setFlag(true);
+                resultInfo.setFileType(split[split.length-1].split("\\.")[1] + "文件");
+            }
+
+        }else {
+            int exist = isExist(name, 1);
+            if (exist == 1){
+                resultInfo.setErrorMsg("抱歉，您所搜索的目录不存在！");
+            }else {
+                openFileTable.setPathName(name);
+                openFileTable.setStartNum(catalog.getStartLocation());
+                openFileTable.setType("文件夹");
+                resultInfo.setFlag(false);
+                resultInfo.setErrorMsg(null);
+                resultInfo.setOpenFileTable(openFileTable);
+            }
+        }
+
+        return resultInfo;
+
     }
 
     public int isOpen(String fileName){

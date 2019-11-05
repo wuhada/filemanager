@@ -26,9 +26,9 @@ public class FilemanagerApplicationTests {
 //        fat.add(2,2);
 //        System.out.println(fat.getCount());
 
-            FileOrCatalogManageImpl fileManage = new FileOrCatalogManageImpl();
+          //  FileOrCatalogManageImpl fileManage = new FileOrCatalogManageImpl();
 //            fileManage.create_file("aaa.txt","txt");
-            fileManage.read_file("aaa.txt",7);
+           // fileManage.read_file("aaa.txt",7);
 //            fileManage.create_catalog("bbb");
 //        try {
 //            Thread.sleep(3000);

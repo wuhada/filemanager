@@ -301,9 +301,11 @@
                 attr : attr
             },function (data) {
                 alert(data.errorMsg);
-                if(data.errorMsg.contains("失败")){
+
+                if(data.flag==false){
                     return false;
                 }
+
                 $('#remaining').html(data.count + "个");
                 sessionStorage.setItem("pathname",data.openFileTable.pathName);
                 sessionStorage.setItem("type",data.openFileTable.type);
@@ -318,6 +320,7 @@
         $('#readFile').click(function () {
             var filename = $('#filename3').val();
             var size = $('#size1').val();
+            var type = sessionStorage.getItem("write");
             if (filename.length == 0){
                 alert("请输入文件名！");
                 return false;
@@ -328,10 +331,14 @@
             }
             $.post("readFile",{
                 filename : filename,
-                size : size
+                size : size,
+                type: type
             },function (data) {
                 alert(data.errorMsg);
                 $('#content').text("");
+                if(data.flag==false) {
+                    return false;
+                }
 
                 $('#remaining').html(data.count + "个");
                 // sessionStorage.setItem("pathname",data.openFileTable.pathName);
@@ -357,6 +364,15 @@
                 //     sessionStorage.setItem("size",data.openFileTable.size);
                 //     sessionStorage.setItem("managertype",data.openFileTable.managerType);
                 // }
+
+
+
+
+                // sessionStorage.setItem("pathname",data.openFileTable.pathName);
+                // sessionStorage.setItem("type",data.openFileTable.type);
+                // sessionStorage.setItem("startnum",data.openFileTable.startNum);
+                // sessionStorage.setItem("size",data.openFileTable.size);
+                // sessionStorage.setItem("managertype",data.openFileTable.managerType);
 
                 sessionStorage.setItem("count",data.count);
 

@@ -63,6 +63,7 @@ public class OSManager {
         String s = om.writeValueAsString(ri);
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(s);
+//        System.out.println(ri.getOpenFileTable().getPathName());
         System.out.println("ssss");
     }
 
@@ -72,7 +73,14 @@ public class OSManager {
         Map<String, String[]> parameter = request.getParameterMap();
         ResultInfo ri;
 
-        ri = manage.read_file(parameter.get("filename")[0],Integer.valueOf(parameter.get("size")[0]));
+
+        if(parameter.get("type")[0].equals("write")){
+            ri = manage.read_file(parameter.get("filename")[0],Integer.valueOf(parameter.get("size")[0]),"以写操作方式打开文件");
+        }else {
+            ri = manage.read_file(parameter.get("filename")[0],Integer.valueOf(parameter.get("size")[0]),"以读操作方式打开文件");
+        }
+
+       // ri = manage.read_file(parameter.get("filename")[0],Integer.valueOf(parameter.get("size")[0]));
 
         ObjectMapper om = new ObjectMapper();
         String s = om.writeValueAsString(ri);
@@ -218,42 +226,8 @@ public class OSManager {
     public void  findFileOrCatalog(HttpServletRequest request,HttpServletResponse response) throws IOException {
 
         Map<String, String[]> parameter = request.getParameterMap();
-        ResultInfo ri = new ResultInfo();
-        OpenFileTable openFileTable = new OpenFileTable();
         String find = parameter.get("find")[0];
-        System.out.println(find);
-//        System.out.println(find);
-        String[] split = ManageUtil.split(find);
-        if (split[split.length-1].contains(".")){
-            int exist = manage.isExist(find, 1);
-            System.out.println("------" + exist);
-            if (exist == 1){
-                ri.setErrorMsg("抱歉，您所搜索的文件不存在！");
-            }else {
-                openFileTable.setSize(catalog.getSize());
-                openFileTable.setPathName(split[split.length-1]);
-                openFileTable.setStartNum(catalog.getStartLocation());
-                openFileTable.setPathName(split[split.length-1]);
-                openFileTable.setType(catalog.getType());
-                ri.setOpenFileTable(openFileTable);
-                ri.setErrorMsg(null);
-                ri.setFlag(true);
-                ri.setFileType(split[split.length-1].split("\\.")[1] + "文件");
-            }
-
-        }else {
-            int exist = manage.isExist(find, 1);
-            if (exist == 1){
-                ri.setErrorMsg("抱歉，您所搜索的目录不存在！");
-            }else {
-                openFileTable.setPathName(split[split.length-1]);
-                openFileTable.setStartNum(catalog.getStartLocation());
-                openFileTable.setType("文件夹");
-                ri.setFlag(false);
-                ri.setErrorMsg(null);
-                ri.setOpenFileTable(openFileTable);
-            }
-        }
+        ResultInfo ri = manage.findFileOrCatalog(find);
 
         ObjectMapper om = new ObjectMapper();
         String s = om.writeValueAsString(ri);
